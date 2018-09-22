@@ -1,0 +1,118 @@
+﻿@model LUSSISADTeam10Web.Models.APIModels.RequisitionModel
+
+@{
+    ViewBag.Title = "Track Requisition";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <link href="~/Styles/css/views/Employee/TrackRequisition.css" rel="stylesheet" />
+}
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+                <h1>Requisitions List</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8 hideinmobile">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index", "Employee")">Dashboard</a></li>
+                    <li><a href="@Url.Action("TrackRequisitions", "Employee")">Requisitions List</a></li>
+                    <li class="active">Track Requisiton</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content mt-3">
+    <div class="animated fadeIn">
+
+
+        <div class="card">
+
+            <div class="card-body">
+                <div class="stepwizard">
+                    <div class="stepwizard-row">
+                        <div class="stepwizard-step">
+                            <button type="button" class="btn @ViewBag.Pending btn-circle">1</button>
+                            <p>Request Pending</p>
+                        </div>
+                        <div class="stepwizard-step">
+                            <button type="button" class="btn @ViewBag.Preparing btn-circle" disabled="disabled">2</button>
+                            <p>Preparing</p>
+                        </div>
+                        <div class="stepwizard-step">
+                            <button type="button" class="btn @ViewBag.Ready btn-circle" disabled="disabled">3</button>
+                            <p>Ready to Collect</p>
+                        </div>
+                        <div class="stepwizard-step">
+                            <button type="button" class="btn @ViewBag.Collected btn-circle" disabled="disabled">4</button>
+                            <p>Completed</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+
+                    <div class="col-md-12">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <div class="mx-auto d-block">
+                                    <h5 class="text-sm-center text-info hideinmobile"> <i class="fa fa-location-arrow fa-3x"></i><br /> @ViewBag.Track </h5><br />
+                                    <h6>Raised By :  @Model.Rasiedbyname </h6><br />
+                                    <h6>Collection Point : @Model.Cpname</h6><br />
+                                    <h6>Requested Date :  @Model.Reqdate.Value.ToString("d")</h6><br />
+                                    <div class="text-sm-center">
+
+                                        <table class="table table-bordered table-hover">
+                                            <thead class="table-info">
+                                                <tr>
+                                                    <th>Item</th>
+                                                    <th class="hideinmobile">Category</th>
+                                                    <th>Quantity</th>
+                                                    <th>UOM</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.Requisitiondetails)
+                                                {
+                                                    <tr>
+                                                        <td>@item.Itemname</td>
+                                                        <td class="hideinmobile">@item.CategoryName</td>
+                                                        <td>@item.Qty</td>
+                                                        <td>@item.UOM</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+
+                                <hr>
+
+
+                                <div class="card-text text-sm-right">
+                                    @if (Model.Status > 0)
+                                    {
+
+                                        <strong> Approved By : @Model.Approvedbyname</strong>
+
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- .animated -->
+</div><!-- .content -->

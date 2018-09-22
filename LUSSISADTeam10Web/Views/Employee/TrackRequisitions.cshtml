@@ -1,0 +1,123 @@
+﻿
+@model IEnumerable<LUSSISADTeam10Web.Models.APIModels.RequisitionModel>
+
+@{
+    ViewBag.Title = "Requisitions List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+                <h1>Requisitions List</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8 hideinmobile">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+
+                    <li><a href="@Url.Action("Index", "Home")">Dashboard</a></li>
+                    <li class="active">Requisitions List</li>
+
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content mt-3">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+
+                    <div class="card-body">
+                        <h5 class="text-sm-center text-info hideinmobile"> <i class="ti-package fa-3x"></i><br /><br /> Requisitions</h5> <br />
+                        @if (Model.Count() > 0)
+                        {
+
+                            <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                                <thead class="table-info">
+                                    <tr>
+                                        <td>
+                                            Date
+                                        </td>
+                                        <td class="hideinmobile">
+                                            Raised By
+                                        </td>
+                                        <td>
+                                            Collection Point
+                                        </td>
+                                        <td>
+                                            Status
+                                        </td>
+                                        <td>Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+
+                                            <td>
+                                                @item.Reqdate.Value.ToString("d")
+                                            </td>
+                                            <td class="hideinmobile">
+                                                @Html.DisplayFor(modelItem => item.Rasiedbyname)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Cpname)
+                                            </td>
+                                            <td>
+                                                @switch (item.Status)
+                                                {
+                                                    case 0:
+                                                        <span>Waiting for Approval from HOD</span>
+                                                        break;
+                                                    case 1:
+                                                        <span>Waiting for Approval from Store</span>
+                                                        break;
+                                                    case 2:
+                                                        <span>Request Pending</span>
+                                                        break;
+                                                    case 3:
+                                                        <span>Preparing</span>
+                                                        break;
+                                                    case 4:
+                                                        <span>Ready to Collect</span>
+                                                        break;
+                                                    case 5:
+                                                        <span>Completed with Awaiting Items</span>
+                                                        break;
+                                                    case 6:
+                                                        <span>Completed</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("TrackRequisition", "Employee", new { id = item.Reqid }, null)" class="btn btn-outline-info btn-sm"><i class="fa fa-location-arrow"></i> Track</a>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        }
+
+
+                        else
+                        {
+                            <h3 class="text-danger pb-2 display-5"> There is no in progress requisition for this department yet! </h3>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

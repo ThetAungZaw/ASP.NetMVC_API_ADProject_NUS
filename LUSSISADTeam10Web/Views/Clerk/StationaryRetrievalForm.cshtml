@@ -1,0 +1,184 @@
+﻿@model IEnumerable<LUSSISADTeam10Web.Models.APIModels.BreakdownByDepartmentModel>
+
+@{
+    ViewBag.Title = "Stationery Retrieval List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <link href="~/Styles/css/views/Clerk/StationaryRetrievalForm.css" rel="stylesheet" />
+}
+
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+                <h1>Stationery Retrieval Form</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8 hideinmobile">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li><a href="@Url.Action("Index", "Clerk")">Dashboard</a></li>
+                    <li><a href="@Url.Action("Requisition", "Clerk")">Requisitions</a></li>
+                    <li class="active">Stationery Retrieval Form</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content mt-3">
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+
+                @if (Model.Count() > 0)
+                {
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <a href="@Url.Action("Requisition", "Clerk")" class="btn btn-outline-info pull-left morereq"> <i class="fa fa-arrow-left"></i> Add More Requisitions </a>
+                        </div>
+                        <div class="col-md-6 col-sm-12 ">
+
+                            <button type="button" onclick="ConfirmDelete()" class="btn btn-outline-info pull-right response" data-toggle="modal" data-target="#myModal">
+                                Item Collected <i class="fa fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+
+
+                        <br />
+                        <br />
+
+                    </div>
+                    <hr />
+
+                    <div id="StationaryRetrivalForm">
+                        <h5 class="text-info text-center hideinmobile"><i class="fa fa-file-pdf-o fa-3x"></i><br /><br /> Stationery Retrival Form - @DateTime.Now.ToShortDateString() <span class="pull-right" id="print"><i class="ti-printer"></i></span> </h5>
+                        <br />
+                        <table class="table table-bordered">
+                            <thead class="thead-dark text-primary text-center">
+                                <tr>
+                                    <td rowspan="2">Item</td>
+                                    <td rowspan="2">Total Quantity</td>
+                                    <td colspan="2">
+                                        Breakdown By Department
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Department</td>
+                                    <td>Qty</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    bool AlreadyShown = false;
+
+                                    foreach (var i in item.BDList)
+                                    {
+                                        if (i.Qty > 0)
+                                        {
+
+                                            <tr>
+                                                @if (!AlreadyShown)
+                                                {
+                                                    <td>@item.ItemDescription</td>
+                                                    <td>@item.TotalQty</td>
+
+                                                    AlreadyShown = true;
+                                                }
+                                                else
+                                                {
+                                                    <td></td>
+                                                    <td></td>
+                                                }
+                                                <td>@i.DeptName</td>
+                                                <td>@i.Qty</td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+                }
+
+                else
+                {
+                    <h5 class="text-center text-info">There is no items to retrieve yet!!!</h5>
+
+                }
+
+
+            </div>
+        </div>
+
+        <div id="blah"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fa fa-exclamation-triangle text-warning" style="font-size : 40px "></i><h5 class="modal-title " id="smallmodalLabel"> &nbsp; &nbsp; Item Already Collected?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body">
+                <h5>Are you sure that you already collected all items described from the warehouse? </h5>
+
+                <div style="text-align:center;display:none" id="loaderDiv">
+                    <img src="~/Styles/images/loading.gif" width="150" />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal">Not Yet</a>
+                <a href="#" class="btn btn-success" onclick="ItemCollect()">Yes</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $('#print').click(function () {
+            window.print();
+        });
+
+            var ConfirmDelete = function () {
+                $("#myModal").modal('show');
+            }
+
+        var ItemCollect = function () {
+            $("#loaderDiv").show();
+              var url1 = '@Url.Action("DisbursementLists", "Clerk")';
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("UpdateToPreparing", "Clerk")',
+                    success: function (ResultSuccess) {
+                        $("#loaderDiv").hide();
+                        $("#myModal").hide();
+                        window.location.href = url1;
+                    }
+                })
+
+            }
+    </script>
+}

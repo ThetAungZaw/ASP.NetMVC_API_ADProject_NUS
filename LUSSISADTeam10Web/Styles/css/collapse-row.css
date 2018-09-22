@@ -1,0 +1,35 @@
+﻿
+.header .sign:after {
+    font-family: FontAwesome;
+    font-size: large;
+    color: teal;
+    content: "\f056";
+}
+
+.header.expand .sign:after {
+    width: 20px;
+    font-size: large;
+    font-weight: 700;
+    content: "\f055";
+}
+div.pager {
+    text-align: right;
+    margin: 2em 0;
+}
+
+    div.pager span {
+        display: inline-block;
+        width: 2em;
+        height: 2em;
+        line-height: 2;
+        text-align: center;
+        cursor: pointer;
+        background: #fff;
+        color: #000;
+        margin-left: 2em;
+        border: 2px solid;
+    }
+
+        div.pager span.active {
+            background: teal;
+        }
